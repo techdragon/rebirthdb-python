@@ -1,27 +1,46 @@
-sudo: false
+dist: xenial
+sudo: required
 language: python
 
-python:
-    - "2.7"
-    - "3.4"
-    - "3.5"
-    - "3.6"
+
+#
+# Explict test matrix.
+#
+matrix:
+  include:
+    - env: TOXENV=py27 PYENV_VERSION='2.7.14'
+    - env: TOXENV=py34 PYENV_VERSION='3.4.7'
+    - env: TOXENV=py35 PYENV_VERSION='3.5.4'
+    - env: TOXENV=py36 PYENV_VERSION='3.6.3'
+    - env: TOXENV=py37 PYENV_VERSION='3.7.0a1'
+    - env: TOXENV=pypy PYENV_VERSION='pypy2.7-5.8.0'
+    - env: TOXENV=pypy3 PYENV_VERSION='pypy3.5-5.8.0'
+    - env: TOXENV=flake8 PYENV_VERSION='3.6.3'
+    - env: TOXENV=prospector PYENV_VERSION='3.6.3'
+    - env: TOXENV=mypy PYENV_VERSION='3.6.3'
+  allow_failures:
+    - env: TOXENV=mypy PYENV_VERSION='3.6.3'
+    - env: TOXENV=prospector PYENV_VERSION='3.6.3'
+  fast_finish: true
+
+cache:
+  - pip
+  - directories:
+    - $HOME/.pyenv_cache
+
+before_install:
+  - pyenv install --list
+  - |
+      if [[ -n "$PYENV_VERSION" ]]; then
+        wget https://raw.githubusercontent.com/praekeltfoundation/travis-pyenv/develop/setup-pyenv.sh
+        source setup-pyenv.sh
+      fi
 
 install:
-    - pip install -r requirements.txt
-
-jobs:
-    include:
-        - stage: upload_coverage
-          python: "3.6"
-          script: make upload-coverage
-
-        - stage: integration_test
-          if: branch = master
-          script: make test-remote
+  - ./.travis/install.sh
 
 before_script:
-    - make prepare
+  - make build-protocol
 
 script:
-    - make test-unit
+  - ./.travis/run.sh tox

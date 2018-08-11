@@ -71,11 +71,13 @@ clean:
 		.eggs \
 		*.egg-info
 
-prepare:
+build-protocol:
 	curl -qo ${TARGET_PROTO_FILE} ${PROTO_FILE_URL}
 	curl -qo ${FILE_CONVERTER_NAME} ${FILE_CONVERTER_URL}
 	curl -qo ${REMOTE_TEST_SETUP_NAME} ${REMOTE_TEST_SETUP_URL}
 	python ./${FILE_CONVERTER_NAME} -l python -i ${TARGET_PROTO_FILE} -o ${TARGET_CONVERTED_PROTO_FILE}
+
+prepare: build-protocol
 	rsync -av ./ ${BUILD_DIR} --filter=':- .gitignore'
 	cp ${TARGET_PROTO_FILE} ${BUILD_DIR}/${PACKAGE_NAME}
 

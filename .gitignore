@@ -65,6 +65,7 @@ venv.bak/
 virtualenv/
 
 # RebirthDB
+rethinkdb_data
 convert_protofile.py
 prepare_remote_test.py
 rebirthdb/ql2_pb2.py
@@ -73,3 +74,4 @@ rebirthdb/*.proto
 # Editors
 .vscode/
 .idea/
+/.mypy_cache

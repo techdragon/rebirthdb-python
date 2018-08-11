@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 if [ "${TRAVIS_PULL_REQUEST}" != "" ]; then
     if [ "${CODACY_PROJECT_TOKEN}" = "" ]; then
         echo "Skipping coverage upload for PR or missing CODACY_PROJECT_TOKEN"

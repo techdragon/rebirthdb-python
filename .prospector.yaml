@@ -1,0 +1,5 @@
+ignore-paths:
+  - build
+  - convert_protofile.py
+  - rebirthdb/docs.py
+  - rebirthdb/ql2_pb2.py
