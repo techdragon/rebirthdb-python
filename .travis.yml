@@ -44,3 +44,4 @@ before_script:
 
 script:
   - ./.travis/run.sh tox
+  - make test-remote
